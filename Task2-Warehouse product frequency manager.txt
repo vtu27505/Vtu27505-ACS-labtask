@@ -1,0 +1,37 @@
+import java.util.*;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        HashMap<Integer, Integer> freq = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            int id = sc.nextInt();
+
+            freq.put(id, freq.getOrDefault(id, 0) + 1);
+        }
+
+        int maxFrequency = 0;
+        int resultID = Integer.MAX_VALUE;
+
+                for (Map.Entry<Integer, Integer> entry : freq.entrySet()) {
+
+            int id = entry.getKey();
+            int frequency = entry.getValue();
+
+            if (frequency > maxFrequency) {
+                maxFrequency = frequency;
+                resultID = id;
+            }
+            else if (frequency == maxFrequency && id < resultID) {
+                resultID = id;
+            }
+        }
+
+        System.out.println(resultID + " " + maxFrequency);
+
+        sc.close();
+    }
+}
