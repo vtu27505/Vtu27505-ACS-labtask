@@ -1,0 +1,148 @@
+import java.util.*;
+
+class Main {
+
+    static class Node {
+        int data;
+        Node next;
+
+        Node(int data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
+
+    
+    static void removeCycle(Node head) {
+
+        Node slow = head;
+        Node fast = head;
+
+        boolean cycleExists = false;
+
+                while (fast != null && fast.next != null) {
+
+            slow = slow.next;
+            fast = fast.next.next;
+
+            if (slow == fast) {
+                cycleExists = true;
+                break;
+            }
+        }
+
+        if (!cycleExists) {
+            return;
+        }
+        slow = head;
+
+        while (slow != fast) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+
+                Node cycleStart = slow;
+        Node temp = cycleStart;
+
+        while (temp.next != cycleStart) {
+            temp = temp.next;
+        }
+
+                temp.next = null;
+    }
+
+        static Node reverseKGroup(Node head, int k) {
+
+        if (head == null || k <= 1) {
+            return head;
+        }
+
+        Node current = head;
+        Node newHead = null;
+        Node previousGroupTail = null;
+
+        while (current != null) {
+
+            Node groupStart = current;
+            Node previous = null;
+
+            int count = 0;
+
+                        while (current != null && count < k) {
+
+                Node nextNode = current.next;
+
+                current.next = previous;
+                previous = current;
+                current = nextNode;
+
+                count++;
+            }
+
+                        if (newHead == null) {
+                newHead = previous;
+            }
+
+                       if (previousGroupTail != null) {
+                previousGroupTail.next = previous;
+            }
+
+                        previousGroupTail = groupStart;
+        }
+
+        return newHead;
+    }
+
+        static void printList(Node head) {
+
+        Node current = head;
+
+        while (current != null) {
+            System.out.print(current.data + " ");
+            current = current.next;
+        }
+
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int k = sc.nextInt();
+
+        Node head = null;
+        Node tail = null;
+
+        Node[] nodes = new Node[n];
+
+              for (int i = 0; i < n; i++) {
+
+            int value = sc.nextInt();
+
+            Node newNode = new Node(value);
+            nodes[i] = newNode;
+
+            if (head == null) {
+                head = newNode;
+                tail = newNode;
+            } else {
+                tail.next = newNode;
+                tail = newNode;
+            }
+        }
+
+        int cyclePosition = sc.nextInt();
+
+                if (cyclePosition >= 0) {
+            tail.next = nodes[cyclePosition];
+        }
+
+               removeCycle(head);
+        head = reverseKGroup(head, k);
+        printList(head);
+
+        sc.close();
+    }
+}
